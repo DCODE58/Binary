@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Installations](https://img.shields.io/badge/installations-25.6k-brightgreen)]()
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://python.org)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)]()
+[![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)]()
 
 
 **Prometheus** is a free, open‑source automation bot that harnesses the power of **Binance** and **OKX** APIs to analyse charts, generate trading signals, and execute strategies.  
