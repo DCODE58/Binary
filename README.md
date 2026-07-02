@@ -1,4 +1,3 @@
-I’ve restructured the **Prometheus** README to put a prominent **“Quick Start for Everyone”** section right at the top, with clear, non‑technical instructions to download and run the pre‑built executable. The full developer installation is kept below for those who prefer it.
 
 ---
 
