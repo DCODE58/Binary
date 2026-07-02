@@ -1,224 +1,258 @@
-# Binary
+# 🔥 Prometheus – Free Multi‑Exchange Chart Analysis & Automation Bot
 
-# [Bot Name] – Automated Binary Options Trading Bot
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://python.org)
+[![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey)]()
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python Version](https://img.shields.io/badge/python-3.9%2B-blue)](https://python.org)
-
-A high-frequency, event-driven trading bot for binary options. It connects to **[Broker/Exchange Name]** via API, executes trades based on configurable strategies, and includes robust risk management and detailed logging.
-
-> **⚠️ IMPORTANT RISK WARNING**  
-> Trading binary options involves substantial risk of loss and is not suitable for all investors. Past performance does not guarantee future results. This software is for **educational and research purposes only**. The authors assume no liability for any financial losses incurred. **Never trade with money you cannot afford to lose.**
+**Prometheus** is a free, open‑source automation bot that harnesses the power of **Binance** and **OKX** APIs to analyse charts, generate trading signals, and execute strategies – all from a single, unified interface.  
+Built with Python, it offers real‑time market scanning, advanced technical analysis, backtesting, and fully automated execution for spot and futures markets.
 
 ---
 
-## Features
-
-- **Multiple Trading Strategies** – RSI, MACD, Bollinger Bands, Martingale (optional), custom user-defined logic.
-- **Real-time Market Data** – WebSocket streaming for low-latency price updates.
-- **Risk Management** – Configurable stake amount, daily loss limit, max concurrent trades, and stop-loss rules.
-- **Backtesting Engine** – Test strategies against historical data before going live.
-- **Telegram/Email Alerts** – Instant notifications for trade entries, exits, and errors.
-- **Detailed Logging** – CSV trade journal and structured logs for analysis.
-- **Dry-Run Mode** – Simulate trades without real money to validate strategies.
-- **Cross-Platform** – Runs on Linux, macOS, Windows (Python 3.9+).
+> ⚠️ **Risk Warning**  
+> Trading cryptocurrencies carries a high level of risk and may not be suitable for all investors.  
+> Prometheus is provided for free testing to see your yield in investment. Never trade with money you cannot afford to lose. The developers assume no liability for any financial losses.
 
 ---
 
-## Prerequisites
+## ✨ Key Features
 
-- Python 3.9 or higher
-- pip (Python package manager)
-- An account with a supported broker (currently: `[Broker Name]`)
-- API credentials (API key / secret) with trading permissions
-
----
-
-## Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/your-binary-bot.git
-   cd your-binary-bot
-   ```
-
-2. **Create a virtual environment (recommended)**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate   # Linux/macOS
-   venv\Scripts\activate      # Windows
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Set up configuration**
-   ```bash
-   cp config.example.yaml config.yaml
-   ```
-   Edit `config.yaml` with your API credentials, risk parameters, and strategy settings.
+- **Multi‑Exchange Support** – Works seamlessly with **Binance** (Spot, Futures) and **OKX** (Spot, Perpetual Swaps). Add more exchanges via a modular adapter.
+- **Real‑Time Chart Analysis** – WebSocket streams for tick‑by‑tick data and 1‑minute OHLCV candles.
+- **25+ Built‑in Indicators** – RSI, MACD, Bollinger Bands, Ichimoku, EMA crossovers, VWAP, Stochastic, ATR and more.
+- **Fully Customisable Strategies** – Write your own Python logic using a simple `BaseStrategy` class. Combine multiple indicators, timeframes, and conditions.
+- **Automated Execution** – Convert signals into live orders with configurable position sizing, stop‑loss, take‑profit, and trailing stops.
+- **Backtesting Engine** – Test any strategy against historical data from both exchanges. Generates detailed performance reports (Sharpe ratio, drawdown, win rate).
+- **Multi‑Symbol Scanner** – Monitor dozens of pairs simultaneously and only fire when conditions are met.
+- **Smart Risk Management** – Global daily loss limit, max concurrent trades, maximum drawdown protection, and per‑trade risk percentage.
+- **Notifications** – Instant alerts via Telegram, Discord, or Email on trade entry, exit, and errors.
+- **Paper Trading** – Simulate strategies in a risk‑free environment using real exchange data.
+- **Portfolio Dashboard** – Live overview of balances, open positions, and P&L across all connected exchanges.
+- **Lightweight & Docker‑Ready** – Single command setup; runs 24/7 on a VPS, Raspberry Pi, or local machine.
 
 ---
 
-## Configuration
+## 🧰 Tech Stack
 
-All bot behaviour is controlled via `config.yaml`. Below is a minimal example:
+- **Language:** Python 3.9+
+- **Exchange APIs:** `python-binance`, `python-okx` (official / community libraries)
+- **Data Analysis:** `pandas`, `numpy`, `ta` (Technical Analysis Library)
+- **Real‑Time Data:** `websocket-client`, `asyncio`
+- **Configuration:** YAML‑based, easily editable
+- **Deployment:** Docker support included
+
+---
+
+## 📦 Installation
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/yourusername/prometheus.git
+cd prometheus
+```
+
+### 2. Set up a virtual environment (recommended)
+```bash
+python -m venv venv
+source venv/bin/activate    # Linux/macOS
+venv\Scripts\activate       # Windows
+```
+
+### 3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configure your exchanges and strategies
+```bash
+cp config.example.yaml config.yaml
+```
+Open `config.yaml` and fill in your API credentials (Binance and/or OKX), along with your preferred trading parameters.
+
+---
+
+## ⚙️ Configuration
+
+All bot behaviour is controlled by a single `config.yaml` file. Below is a minimal example.
 
 ```yaml
-broker:
-  name: "your_broker"
-  api_key: "YOUR_API_KEY"
-  api_secret: "YOUR_API_SECRET"
-  mode: "demo"               # "live" or "demo"
+exchanges:
+  binance:
+    enabled: true
+    api_key: "YOUR_BINANCE_API_KEY"
+    api_secret: "YOUR_BINANCE_API_SECRET"
+    testnet: false            # Use testnet for paper trading
+    futures: true             # Enable Futures; set false for Spot
+  okx:
+    enabled: false
+    api_key: "YOUR_OKX_API_KEY"
+    api_secret: "YOUR_OKX_API_SECRET"
+    passphrase: "YOUR_OKX_PASSPHRASE"
+    demo: true
 
-trading:
-  symbol: "EUR/USD"
-  amount: 10                  # Stake per trade (in account currency)
-  max_daily_loss: 100
-  max_open_trades: 3
-  trade_duration: 60          # Seconds (or "m1", "m5")
+global_settings:
+  mode: "paper"               # "paper", "live"
+  base_quote: "USDT"          # Quote currency for all pairs
+  max_open_trades: 5
+  max_daily_loss: 200         # In quote currency
+  risk_per_trade: 1.0         # % of balance per trade
 
 strategies:
-  active: "rsi_macd"          # Strategy name (must match a class)
-  rsi_macd:
-    rsi_period: 14
-    rsi_oversold: 30
-    rsi_overbought: 70
-    macd_fast: 12
-    macd_slow: 26
-    macd_signal: 9
+  active: ["ema_crossover", "rsi_scalp"]
+  # Each strategy can override its own symbol list and timeframe
+  ema_crossover:
+    symbols: ["BTC/USDT", "ETH/USDT"]
+    timeframe: "15m"
+    fast_ema: 9
+    slow_ema: 21
+    trade_direction: "long"   # "long", "short", "both"
+  rsi_scalp:
+    symbols: ["SOL/USDT", "DOGE/USDT"]
+    timeframe: "5m"
+    rsi_period: 7
+    oversold: 30
+    overbought: 70
 
 notifications:
   telegram:
     enabled: false
-    bot_token: "YOUR_BOT_TOKEN"
+    bot_token: "YOUR_TELEGRAM_BOT_TOKEN"
     chat_id: "YOUR_CHAT_ID"
+  discord:
+    enabled: false
+    webhook_url: "YOUR_DISCORD_WEBHOOK"
   email:
     enabled: false
     smtp_server: "smtp.gmail.com"
     smtp_port: 587
     username: "you@example.com"
-    password: "your_password"
+    password: "your_app_password"
     recipient: "alerts@example.com"
 
 logging:
-  level: "INFO"               # DEBUG, INFO, WARNING, ERROR
-  log_file: "bot.log"
-  trade_journal: "trades.csv"
+  level: "INFO"
+  log_file: "prometheus.log"
+  trade_journal: "journal.csv"
 ```
-
-**Strategy files** are located in the `strategies/` directory. You can add your own by implementing the base strategy class.
 
 ---
 
-## Usage
+## 🚀 Usage
 
-### Dry-Run / Paper Trading
-Test without risking real money:
+### Paper Trading (Safe Simulation)
 ```bash
-python bot.py --dry-run
+python prometheus.py --mode paper
+```
+All signals are executed virtually. Perfect for testing strategies without any risk.
+
+### Live Trading (Real Money – Use with Caution!)
+```bash
+python prometheus.py --mode live
 ```
 
-### Live Trading (DEMO account first!)
+### Run a Single Strategy on a Specific Pair
 ```bash
-python bot.py --mode demo
+python prometheus.py --strategy ema_crossover --symbol BTC/USDT
 ```
-Once confident, use `--mode live` (with extreme caution).
 
 ### Backtesting
-Evaluate a strategy on historical data:
+Evaluate a strategy on historical data from Binance or OKX:
 ```bash
-python backtest.py --strategy rsi_macd --symbol EUR/USD --from 2024-01-01 --to 2024-12-31
+python backtest.py --strategy ema_crossover --symbol ETH/USDT --timeframe 1h --from 2024-06-01 --to 2025-01-01
 ```
-Results are saved to `backtest_results/`.
+Results are saved to `backtest_results/` and include a chart (if matplotlib is installed).
 
-### Command-Line Options
-| Flag | Description |
-|------|-------------|
-| `--config` | Path to config file (default: `config.yaml`) |
-| `--dry-run` | Simulate trades without connecting to broker |
-| `--mode` | `demo` or `live` (overrides config) |
-| `--strategy` | Override active strategy for a single run |
+### Multi‑Symbol Scanner
+Monitor the entire market for sudden volume spikes or breakout patterns:
+```bash
+python scanner.py --exchange binance --quote USDT --min_volume 500000
+```
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
-.
-├── bot.py                 # Main entry point
-├── backtest.py            # Historical backtesting script
-├── config.example.yaml    # Configuration template
+prometheus/
+├── prometheus.py             # Main entry point
+├── backtest.py               # Historical backtesting tool
+├── scanner.py                # Market scanner
+├── config.example.yaml       # Configuration template
 ├── requirements.txt
-├── strategies/            # Strategy implementations
-│   ├── __init__.py
+├── Dockerfile
+├── strategies/               # User‑defined strategy files
 │   ├── base_strategy.py
-│   ├── rsi_macd.py
-│   └── martingale.py
-├── core/                  # Broker API wrapper, risk manager, etc.
-├── utils/                 # Logging, notifications, helpers
-└── tests/                 # Unit tests
+│   ├── ema_crossover.py
+│   ├── rsi_scalp.py
+│   └── ...
+├── core/                     # Core engine
+│   ├── exchange_handler.py   # Unified interface for Binance & OKX
+│   ├── risk_manager.py
+│   ├── data_feed.py          # Real‑time and historical data
+│   ├── portfolio.py
+│   └── notifier.py           # Telegram, Discord, Email
+├── indicators/               # Custom indicator calculations
+├── utils/                    # Helpers, logging, etc.
+└── tests/                    # Unit and integration tests
 ```
 
 ---
 
-## Adding a Custom Strategy
+## 🧪 Writing Your Own Strategy
 
 1. Create a new file in `strategies/` (e.g., `my_strategy.py`).
-2. Subclass `BaseStrategy` and implement `should_enter(data)` which returns a signal: `"CALL"`, `"PUT"`, or `None`.
-3. Register the strategy by adding it to the `strategies/__init__.py` list.
-4. Reference it in `config.yaml` under `strategies.active`.
+2. Subclass `BaseStrategy` and implement the `on_candle(self, df)` method.
+3. The method receives a pandas DataFrame with OHLCV and your chosen indicators.
+4. Return `"BUY"`, `"SELL"`, or `None` to trigger an order (or no action).
 
-Example skeleton:
+Example:
 ```python
-from .base_strategy import BaseStrategy
+from strategies.base_strategy import BaseStrategy
 
 class MyStrategy(BaseStrategy):
-    def should_enter(self, data):
-        # data is a pandas DataFrame with OHLCV and indicators
-        if data['close'].iloc[-1] > data['sma_20'].iloc[-1]:
-            return "CALL"
-        elif data['close'].iloc[-1] < data['sma_20'].iloc[-1]:
-            return "PUT"
+    def on_candle(self, df):
+        # Buy when RSI < 30 and price above 50-EMA
+        last = df.iloc[-1]
+        if last['rsi'] < 30 and last['close'] > last['ema_50']:
+            return "BUY"
+        # Sell when RSI > 70
+        if last['rsi'] > 70:
+            return "SELL"
         return None
 ```
 
+Add your strategy to `config.yaml` under `strategies.active`.
+
 ---
 
-## Testing
+## 🐳 Running with Docker
 
-Run the test suite with pytest:
 ```bash
-pytest tests/ -v
+docker build -t prometheus .
+docker run -d --name prometheus -v $(pwd)/config.yaml:/app/config.yaml prometheus
 ```
 
 ---
 
-## Disclaimer
+## 🤝 Contributing
 
-This software is provided "as is", without warranty of any kind. Use at your own risk. The developers are not responsible for any financial losses or damages. Be aware that binary options trading is **banned in some jurisdictions** – you are solely responsible for complying with local laws.
-
----
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Make sure to update tests as appropriate.
+Prometheus is a community‑driven project. Contributions, bug reports, and feature requests are highly welcome!  
+Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ---
 
-## License
+## 📜 License
 
-[MIT](LICENSE) © [Your Name]
+This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## Support
+## ⭐ Support & Community
 
-- Documentation: [Link to Wiki or Docs]
-- Issues: [https://github.com/yourusername/your-binary-bot/issues](https://github.com/yourusername/your-binary-bot/issues)
-- Email: support@example.com (no trading advice)
-```
+- 💬 Join our [Discord server](https://discord.gg/example) (coming soon)
+- 🐛 Report issues: [GitHub Issues](https://github.com/yourusername/prometheus/issues)
+- 📧 Direct contact: prometheus@gmail.com (no financial advice)
 
-You can copy this directly as your `README.md` and fill in the specifics. If the term “binary bot” referred to something completely different (e.g., a Discord bot that sends binary files, or a bot for managing binary packages), please let me know and I'll tailor the README accordingly.
+---
+
+**Prometheus** – *Bring fire to your trading.*
